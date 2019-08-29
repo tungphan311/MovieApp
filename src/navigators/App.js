@@ -1,23 +1,75 @@
 import React, { Component } from 'react';
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import { SafeAreaView } from 'react-native';
 import NowPlaying from '../containers/NowPlaying';
+import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createMaterialTopTabNavigator } from 'react-navigation'
+import { createAppContainer } from 'react-navigation';
 import TopRated from '../containers/TopRated';
+import Icon from 'react-native-vector-icons/Ionicons';
+import Favorite from '../containers/Favorite';
 
-const AppNavigator = createStackNavigator({
-  nowPlaying: {
-    screen: NowPlaying
-  },
-  topRated: { screen: TopRated }
-}, {
-  initialRouteName: 'nowPlaying'
-});
+const TabNavigator = createMaterialTopTabNavigator(
+  {
+    nowPlaying: { 
+      screen: NowPlaying,
+      navigationOptions: {
+        tabBarLabel: 'Now playing',
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="ios-film" color={tintColor} size={24} />
+        )
+      }
+    },
+    topRated: { 
+      screen: TopRated,
+      navigationOptions: {
+        tabBarLabel: 'Top rated',
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="ios-star" color={tintColor} size={24} />
+        )
+      }
+    },
+    favorite: {
+      screen: Favorite,
+      navigationOptions: {
+        tabBarLabel: 'Favorite',
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="ios-heart" color={tintColor} size={24} />
+        )
+      }
+    }
+  }, 
+  {
+    initialRouteName: 'nowPlaying',
+    tabBarPosition: 'bottom',
+    swipeEnabled: true,
+    tabBarOptions: {
+      activeTintColor: 'orange',
+      inactiveTintColor: 'grey',
+      style: { 
+        backgroundColor: '#fff',
+        borderTopWidth: 0.5,
+        borderTopColor: 'grey'
+      },
+      shifting: true,
+      showIcon: true,
+      
+      indicatorStyle: {
+        height: 0
+      }
+    }
+  }
+);
 
-const AppContainer = createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(TabNavigator);
 
 export default class App extends Component {
   render () {
     return (
-      <AppContainer />
+      <SafeAreaView style={{
+        flex: 1, backgroundColor: '#f2f2f2'
+      }}>
+        <AppContainer />
+      </SafeAreaView>
     );
   }
 }
