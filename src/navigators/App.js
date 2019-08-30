@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import NowPlaying from '../containers/NowPlaying';
-import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { createMaterialTopTabNavigator } from 'react-navigation'
 import { createAppContainer } from 'react-navigation';
 import TopRated from '../containers/TopRated';
@@ -67,7 +66,7 @@ export default class App extends Component {
     return (
       <SafeAreaView style={{
         flex: 1, backgroundColor: '#f2f2f2'
-      }}>
+      }} forceInset={{ top: 'always' }}>
         <AppContainer />
       </SafeAreaView>
     );

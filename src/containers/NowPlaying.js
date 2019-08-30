@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator, StyleSheet, FlatList } from "react-native";
+import { View, ActivityIndicator, FlatList } from "react-native";
 import MoviewRow from '../components/MovieRow';
 import '../api/rest';
+import Search from '../components/Search';
 
 const BASE_URL = `http://api.themoviedb.org/3/`;
 
@@ -12,6 +13,7 @@ class NowPlaying extends Component {
         this.state = {
             isLoading: true,
             movies: [],
+            listMovies: []
         }
     }
     
@@ -36,7 +38,8 @@ class NowPlaying extends Component {
     
         return fetch(url).then(response => response.json()).then(responseJson => {
             this.setState({
-                movies: responseJson,
+                movies: responseJson.results,
+                listMovies: responseJson.results,
                 isLoading: false
             })
         }).catch(error => {
@@ -49,17 +52,22 @@ class NowPlaying extends Component {
     renderItem = (item) => {
         const { poster_path, title, overview } = item;
         let image = poster_path.substring(1);
-        console.log(image)
         return (
             <MoviewRow image={image} name={title} overview={overview} />
         )
     }
 
+    inputChange = (text) => {
+        let { listMovies } = this.state;
+
+        movies = listMovies.filter(movie => movie.title.toLowerCase().includes(text.toLowerCase()));
+
+        this.setState({ movies: movies });
+    }
+
     render() {
         const { navigate, push } = this.props.navigation;
         const { isLoading, movies } = this.state;
-        const { results } = movies;
-        console.log(results)
 
         if (isLoading) {
             return (
@@ -69,21 +77,16 @@ class NowPlaying extends Component {
             );
         }
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, flexDirection: 'column' }}>
+                <Search inputChange={this.inputChange} />
                 <FlatList
                     style={{ height: '100%' }} 
-                    data={results}
+                    data={movies}
                     renderItem={({item}) => this.renderItem(item)}
                 />
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    // container: {
-    //     backgroundColor: '#f2f2f2',
-    // },
-})
 
 export default NowPlaying;
