@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { SafeAreaView } from 'react-navigation';
 import NowPlaying from '../containers/NowPlaying';
 import { createMaterialTopTabNavigator } from 'react-navigation'
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 import TopRated from '../containers/TopRated';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Favorite from '../containers/Favorite';
+import Movie from '../containers/Movie';
 
 const TabNavigator = createMaterialTopTabNavigator(
   {
@@ -43,9 +44,9 @@ const TabNavigator = createMaterialTopTabNavigator(
     swipeEnabled: true,
     tabBarOptions: {
       activeTintColor: 'orange',
-      inactiveTintColor: 'grey',
+      inactiveTintColor: '#fff',
       style: { 
-        backgroundColor: '#fff',
+        backgroundColor: 'grey',
         borderTopWidth: 0.5,
         borderTopColor: 'grey'
       },
@@ -59,14 +60,24 @@ const TabNavigator = createMaterialTopTabNavigator(
   }
 );
 
-const AppContainer = createAppContainer(TabNavigator);
+const AppNavigator = createStackNavigator(
+  {
+    home: TabNavigator,
+    movie: { screen: Movie }
+  },
+  {
+    headerMode: 'none'
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends Component {
   render () {
     return (
       <SafeAreaView style={{
-        flex: 1, backgroundColor: '#f2f2f2'
-      }} forceInset={{ top: 'always' }}>
+        flex: 1, backgroundColor: '#000'
+      }} forceInset={{ top: 'never', bottom: 'never' }}>
         <AppContainer />
       </SafeAreaView>
     );
