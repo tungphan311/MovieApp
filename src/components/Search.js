@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { StyleSheet, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import Constant from '../lib/utils';
+
+const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? (Constant.IS_IPHONE_X ? 44 : 20) : 0;
 
 export default class Search extends Component {
     handleInputChange = (text) => {
@@ -11,11 +14,22 @@ export default class Search extends Component {
     render() {
         return (
             <View style={styles.searchWrapper}>
-                <Icon name='ios-search' size={20} style={styles.searchIcon} />
+                <Icon 
+                    name='ios-arrow-back' 
+                    size={20} 
+                    style={styles.searchIcon} 
+                    color='#fff' 
+                />
                 <TextInput 
                     style={styles.searchInput} 
                     placeholder='Enter your movies' 
                     onChangeText={(text) => this.handleInputChange(text)} 
+                />
+                <Icon 
+                    name='ios-close'
+                    style={styles.searchIcon}
+                    color='#fff'
+                    size={24}
                 />
             </View>
         )
@@ -28,10 +42,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff'
+        backgroundColor: '#000',
+        marginTop: STATUS_BAR_HEIGHT
     },
     searchIcon: {
-        padding: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
     },
     searchInput: {
         flex: 1,
@@ -39,5 +57,6 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         paddingBottom: 10,
         paddingRight: 10,
+        color: '#fff',
     }
 });
