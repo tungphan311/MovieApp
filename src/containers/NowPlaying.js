@@ -10,6 +10,7 @@ import Card from '../components/Card';
 import '../api/rest';
 import Search from '../components/Search';
 import Constant from '../lib/utils';
+import InfiniteScrollView from 'react-native-infinite-scroll-view';
 
 class NowPlaying extends Component {
     constructor(props) {
@@ -20,6 +21,10 @@ class NowPlaying extends Component {
             movies: [],
             listMovies: [],
             refreshing: false,
+            canLoadMore: true,
+            url: '',
+            page: 1,
+            totalPage: 0,
         }
     }
     
@@ -28,40 +33,16 @@ class NowPlaying extends Component {
     }
 
     getNowPlayingMovies = () => {
-        const now = new Date();
-    
-        let today = now.getDate();
-        let begin = today > 15 ? ( today - 15 ) : ( today + 15 );
+        const { MOVIE_URL, API_KEY } = Constant;
+        const url = MOVIE_URL + `now_playing?api_key=${API_KEY}`;
+        this.setState({ url: url });
 
-        if (today < 10) {
-            today = `0${today}`;
-        }
-
-        if (begin < 10) {
-            begin = `0${begin}`;
-        }
-    
-        const month = now.getMonth();
-
-        let beginMonth;
-        const endMonth = month > 8 ? ( month + 1 ) : `0${month + 1}`;
-    
-        if (today > 15) {
-            beginMonth = month > 8 ? ( month + 1 ) : `0${month + 1}`;
-        } else {
-            beginMonth = month > 8 ?  month : `0${month}`;
-        }
-    
-        const startDay = `${now.getFullYear()}-${beginMonth}-${begin}`;
-        const endDay = `${now.getFullYear()}-${endMonth}-${today}`;
-    
-        const url = Constant.BASE_URL + `discover/movie?primary_release_date.lte=${endDay}&primary_release_date.gte=${startDay}`;
-    
         return fetch(url).then(response => response.json()).then(responseJson => {
             this.setState({
                 movies: responseJson.results,
                 listMovies: responseJson.results,
-                isLoading: false
+                isLoading: false,
+                totalPage: responseJson.total_pages,
             })
         }).catch(error => {
             if (error) {
@@ -101,8 +82,36 @@ class NowPlaying extends Component {
         });
     }
 
+    onLoadMoreAsync = async () => {
+        let { url, page, totalPage } = this.state;
+
+        page += 1;
+        this.setState({ page: page });
+
+        if (page === totalPage) {
+            this.setState({ canLoadMore: false });
+        }
+
+        url = `${url}&page=${page}`;
+        // console.log(url);
+
+        await fetch(url).then(response => response.json()).then(responseJson => {
+            this.setState(curState => {
+                let newMovies = [...curState.movies, ...responseJson.results];
+                console.log(newMovies)
+                return {
+                    movies: newMovies,
+                }
+            })
+        }).catch(error => {
+            if (error) {
+                console.log(error);
+            }
+        });
+    }
+
     render() {
-        const { isLoading, movies, refreshing } = this.state;
+        const { isLoading, movies, refreshing, canLoadMore } = this.state;
 
         if (isLoading) {
             return (
@@ -125,6 +134,9 @@ class NowPlaying extends Component {
                             onRefresh={this.onRefresh}
                         />
                     }
+                    renderScrollComponent={props => <InfiniteScrollView {...props} />}
+                    canLoadMore={canLoadMore}
+                    onLoadMoreAsync={this.onLoadMoreAsync}
                 />
             </View>
         );
