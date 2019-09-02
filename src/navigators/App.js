@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { SafeAreaView } from 'react-navigation';
-import NowPlaying from '../containers/NowPlaying';
+import Lists from '../containers/Lists';
 import { createMaterialTopTabNavigator } from 'react-navigation'
 import { createAppContainer, createStackNavigator } from 'react-navigation';
-import TopRated from '../containers/TopRated';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Favorite from '../containers/Favorite';
 import Movie from '../containers/Movie';
@@ -11,7 +10,7 @@ import Movie from '../containers/Movie';
 const TabNavigator = createMaterialTopTabNavigator(
   {
     nowPlaying: { 
-      screen: NowPlaying,
+      screen: props => <Lists {...props} tabs='now_playing' />,
       navigationOptions: {
         tabBarLabel: 'Now playing',
         tabBarIcon: ({ tintColor }) => (
@@ -20,7 +19,7 @@ const TabNavigator = createMaterialTopTabNavigator(
       }
     },
     topRated: { 
-      screen: TopRated,
+      screen: props => <Lists {...props} tabs='top_rated' />,
       navigationOptions: {
         tabBarLabel: 'Top rated',
         tabBarIcon: ({ tintColor }) => (

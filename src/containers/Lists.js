@@ -12,14 +12,13 @@ import Search from '../components/Search';
 import Constant from '../lib/utils';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 
-class NowPlaying extends Component {
+class Lists extends Component {
     constructor(props) {
         super(props);
         
         this.state = {
             isLoading: true,
             movies: [],
-            listMovies: [],
             refreshing: false,
             canLoadMore: true,
             url: '',
@@ -29,12 +28,14 @@ class NowPlaying extends Component {
     }
     
     componentDidMount = () => {
-        this.getNowPlayingMovies();
+        const { tabs } = this.props;
+
+        this.getNowPlayingMovies(tabs);
     }
 
-    getNowPlayingMovies = () => {
+    getNowPlayingMovies = (tabs) => {
         const { MOVIE_URL, API_KEY } = Constant;
-        const url = MOVIE_URL + `now_playing?api_key=${API_KEY}`;
+        const url = MOVIE_URL + `${tabs}?api_key=${API_KEY}`;
         this.setState({ url: url });
 
         return fetch(url).then(response => response.json()).then(responseJson => {
@@ -151,4 +152,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default NowPlaying;
+export default Lists;
