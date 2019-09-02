@@ -220,7 +220,7 @@ export default class Movie extends Component {
                     headerMaxHeight={Constant.SCREEN_WIDTH*4/3}
                     extraScrollHeight={20}
                     navbarColor="#000"
-                    title={title}
+                    title=''
                     titleStyle={styles.titleStyle}
                     backgroundImage={images}
                     backgroundImageScale={1.2}

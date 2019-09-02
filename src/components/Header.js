@@ -5,13 +5,14 @@ import Constant from '../lib/utils';
 
 const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? (Constant.IS_IPHONE_X ? 44 : 20) : 0;
 
-export default class Search extends Component {
+export default class Header extends Component {
     handleInputChange = (text) => {
         const { inputChange } = this.props;
 
         inputChange(text);
     }
     render() {
+        const { navigate } = this.props.navigation;
         return (
             <View style={styles.searchWrapper}>
                 <Image 
@@ -23,6 +24,7 @@ export default class Search extends Component {
                     style={styles.searchIcon}
                     color='#fff'
                     size={24}
+                    onPress={() => navigate('search')}
                 />
             </View>
         )
