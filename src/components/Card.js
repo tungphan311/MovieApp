@@ -36,12 +36,12 @@ class Card extends Component {
             id, 
             rating 
         } = this.props;
-        const { navigate } = navigation;
+        const { push } = navigation;
 
         return (  
             <TouchableOpacity 
                 style={styles.container} 
-                onPress={() => navigate('movie', { id: id })}
+                onPress={() => push('movie', { id: id })}
             >
                 { this.renderImage(image) }
 

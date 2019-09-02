@@ -6,6 +6,7 @@ import { createAppContainer, createStackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Favorite from '../containers/Favorite';
 import Movie from '../containers/Movie';
+import Search from '../containers/Search';
 
 const TabNavigator = createMaterialTopTabNavigator(
   {
@@ -62,7 +63,8 @@ const TabNavigator = createMaterialTopTabNavigator(
 const AppNavigator = createStackNavigator(
   {
     home: TabNavigator,
-    movie: { screen: Movie }
+    movie: { screen: Movie },
+    search: { screen: Search }
   },
   {
     headerMode: 'none'

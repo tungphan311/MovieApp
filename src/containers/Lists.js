@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import Card from '../components/Card';
 import '../api/rest';
-import Search from '../components/Search';
+import Header from '../components/Header';
 import Constant from '../lib/utils';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 
@@ -41,7 +41,6 @@ class Lists extends Component {
         return fetch(url).then(response => response.json()).then(responseJson => {
             this.setState({
                 movies: responseJson.results,
-                listMovies: responseJson.results,
                 isLoading: false,
                 totalPage: responseJson.total_pages,
             })
@@ -68,19 +67,11 @@ class Lists extends Component {
         )
     }
 
-    inputChange = (text) => {
-        let { listMovies } = this.state;
-
-        movies = listMovies.filter(movie => movie.title.toLowerCase().includes(text.toLowerCase()));
-
-        this.setState({ movies: movies });
-    }
-
     onRefresh = () => {
-        this.setState({refreshing: true});
-        this.getNowPlayingMovies().then(() => {
-            this.setState({refreshing: false});
-        });
+        // this.setState({refreshing: true});
+        // this.getNowPlayingMovies().then(() => {
+        //     this.setState({refreshing: false});
+        // });
     }
 
     onLoadMoreAsync = async () => {
@@ -94,7 +85,6 @@ class Lists extends Component {
         }
 
         url = `${url}&page=${page}`;
-        // console.log(url);
 
         await fetch(url).then(response => response.json()).then(responseJson => {
             this.setState(curState => {
@@ -113,6 +103,7 @@ class Lists extends Component {
 
     render() {
         const { isLoading, movies, refreshing, canLoadMore } = this.state;
+        const { navigation } = this.props;
 
         if (isLoading) {
             return (
@@ -123,7 +114,10 @@ class Lists extends Component {
         }
         return (
             <View style={{ flex: 1, flexDirection: 'column', backgroundColor: '#000' }}>
-                <Search inputChange={this.inputChange} />
+                <Header 
+                    inputChange={this.inputChange} 
+                    navigation={navigation} 
+                />
                 <FlatList
                     contentContainerStyle={styles.grid}
                     data={movies}
