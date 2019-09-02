@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
-import { Text, View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity, 
+    ActivityIndicator 
+} from 'react-native';
 import Constant from '../lib/utils';
 import Stars from './Stars';
+import { Image } from 'react-native-elements';
 
 class Card extends Component {
     renderImage = (image) => {
         if (image === null) {
-            console.log('null')
             return (
                 <Image 
                     source={require('../images/sorry-image-not-available.jpg')} 
@@ -18,6 +23,7 @@ class Card extends Component {
             <Image 
                 source={{ uri: `${Constant.IMAGE_URL}${image}` }} 
                 style={styles.image} 
+                PlaceholderContent={<ActivityIndicator />}
             />
         );
     }
