@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import { 
+    View, 
+    ActivityIndicator, 
+    FlatList, 
+    StyleSheet,
+    RefreshControl
+} from "react-native";
 import Card from '../components/Card';
 import '../api/rest';
 import Search from '../components/Search';
@@ -12,7 +18,8 @@ class NowPlaying extends Component {
         this.state = {
             isLoading: true,
             movies: [],
-            listMovies: []
+            listMovies: [],
+            refreshing: false,
         }
     }
     
@@ -87,8 +94,15 @@ class NowPlaying extends Component {
         this.setState({ movies: movies });
     }
 
+    onRefresh = () => {
+        this.setState({refreshing: true});
+        this.getNowPlayingMovies().then(() => {
+            this.setState({refreshing: false});
+        });
+    }
+
     render() {
-        const { isLoading, movies } = this.state;
+        const { isLoading, movies, refreshing } = this.state;
 
         if (isLoading) {
             return (
@@ -105,6 +119,12 @@ class NowPlaying extends Component {
                     data={movies}
                     renderItem={({item}) => this.renderItem(item)}
                     numColumns={2}
+                    refreshControl={
+                        <RefreshControl 
+                            refreshing={refreshing}
+                            onRefresh={this.onRefresh}
+                        />
+                    }
                 />
             </View>
         );
