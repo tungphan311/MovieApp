@@ -1,35 +1,30 @@
 import React, { Component } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Constant from '../lib/utils';
 
 const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? (Constant.IS_IPHONE_X ? 44 : 20) : 0;
 
-export default class Search extends Component {
+export default class Header extends Component {
     handleInputChange = (text) => {
         const { inputChange } = this.props;
 
         inputChange(text);
     }
     render() {
+        const { navigate } = this.props.navigation;
         return (
             <View style={styles.searchWrapper}>
-                <Icon 
-                    name='ios-arrow-back' 
-                    size={20} 
-                    style={styles.searchIcon} 
-                    color='#fff' 
-                />
-                <TextInput 
-                    style={styles.searchInput} 
-                    placeholder='Enter your movies' 
-                    onChangeText={(text) => this.handleInputChange(text)} 
+                <Image 
+                    source={ require('../images/logo.png') }
+                    style={styles.logo}  
                 />
                 <Icon 
-                    name='ios-close'
+                    name='ios-search'
                     style={styles.searchIcon}
                     color='#fff'
                     size={24}
+                    onPress={() => navigate('search')}
                 />
             </View>
         )
@@ -40,7 +35,7 @@ const styles = StyleSheet.create({
     searchWrapper: {
         height: 50,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#000',
         marginTop: STATUS_BAR_HEIGHT
@@ -58,5 +53,10 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         paddingRight: 10,
         color: '#fff',
+    },
+    logo: {
+        marginLeft: 20,
+        width: 32,
+        height: 32
     }
 });
